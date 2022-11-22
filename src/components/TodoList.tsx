@@ -4,6 +4,7 @@ import { TodoItem } from './TodoItem';
 
 export interface ITodoListProps {
   todos: ToDo[];
+  loading: boolean;
   handleToggleDone: Function;
 }
 
@@ -21,6 +22,7 @@ export interface ITodoListProps {
  */
 export const TodoList = memo(function TodoList({
   todos,
+  loading,
   handleToggleDone,
 }: ITodoListProps) {
   const todoList = todos.map((todo) => (
@@ -29,6 +31,7 @@ export const TodoList = memo(function TodoList({
       key={todo.id}
       done={todo.done}
       label={todo.label}
+      loading={loading}
       handleToggleDone={() => handleToggleDone(todo.id)}
     />
   ));

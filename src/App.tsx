@@ -3,11 +3,24 @@ import { ApiClient, ToDo } from './ApiClient';
 import './App.css';
 import { TodoList } from './components/TodoList';
 
-const apiClient = new ApiClient(false);
+const apiClient = new ApiClient(true);
 
 function App() {
   const [todos, setTodos] = useState<ToDo[]>([]);
   const [label, setLabel] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
+  // Depending on how deeply nested and how many components that need
+  // the loading states, we may want to move this to a React Context.
+  // However, since it's two children deep, it's easier to debug and
+  // setup, so keep for now.
+  const [isAddingTodo, setIsAddingTodo] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Probably don't need this in the state, but add it here
+  // in case we want to update the fetch label.
+  const [fetchingLabel, setfetchingLabel] = useState(
+    'Retrieving your todo list...'
+  );
 
   /**
    * Fetch the latest Todos from the API.
@@ -17,21 +30,27 @@ function App() {
    * but we'll see :)
    */
   const fetchLatestTodos = () => {
+    setIsFetching(true);
     apiClient
       .getToDos()
       .then((fetchedTodos) => setTodos(fetchedTodos))
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setIsFetching(false)); // toggle off isFetching flag
   };
 
   // We fetch once, but don't update the view after
   // an event has been called, i.e. `addTodo`, `toggleDone`
   useEffect(() => {
+    // Toggle a loading flag for the initial "loading" time
     fetchLatestTodos();
   }, []);
 
   /**
    * Add a new todo through the API, and refresh the view
    * without making an additional API call.
+   *
+   * Todo:
+   * - Prevent empty string todos from being created
    *
    * Notes:
    * - Maybe refocus on input after adding a todo
@@ -40,6 +59,14 @@ function App() {
    */
   const handleAddTodo = async (label: string) => {
     try {
+      // Don't allow empty labels
+      if (!label) {
+        return;
+      }
+
+      // Turn on is updating flag
+      setIsAddingTodo(true);
+
       // Add additional todos through the API
       const newTodo = await apiClient.addTodo(label);
 
@@ -54,6 +81,9 @@ function App() {
       // TODO: In the future, add an notification for the client
       // about the error
       console.error('Could not save new Todo: ', error);
+    } finally {
+      // Turn off is updating flag
+      setIsAddingTodo(false);
     }
   };
 
@@ -68,6 +98,9 @@ function App() {
    */
   const handleToggleDone = async (id: string) => {
     try {
+      // Turn on is updating flag
+      setIsUpdating(true);
+
       // We return the toggle Todo, but we don't update the view
       await apiClient.toggleDone(id);
 
@@ -90,8 +123,29 @@ function App() {
       // TODO: In the future, add an notification for the client
       // about the error
       console.error('Could not complete Todo: ', error);
+    } finally {
+      // Turn off is updating flag
+      setIsUpdating(false);
     }
   };
+
+  let todoList = (
+    <div>
+      <p>{fetchingLabel}</p>
+    </div>
+  );
+
+  if (!isFetching) {
+    todoList = (
+      <TodoList
+        todos={todos}
+        loading={isUpdating}
+        handleToggleDone={handleToggleDone}
+      />
+    );
+  }
+
+  const loadingClass = isUpdating ? 'is-disabled' : '';
 
   return (
     <>
@@ -103,11 +157,18 @@ function App() {
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           placeholder="Buy groceries"
+          disabled={isUpdating}
         />
-        <button onClick={() => handleAddTodo(label)}>Add ToDo</button>
+        <button
+          className={loadingClass}
+          disabled={isAddingTodo}
+          onClick={() => handleAddTodo(label)}
+        >
+          {isAddingTodo ? 'Saving ToDo' : 'Add ToDo'}
+        </button>
       </div>
 
-      <TodoList todos={todos} handleToggleDone={handleToggleDone} />
+      {todoList}
     </>
   );
 }

@@ -10,14 +10,19 @@
 }
 
 .todo-item {
-  border: 1px solid grey;
-  border-radius: 1em;
+  border: 1px solid gainsboro;
+  border-radius: 5px;
   padding: 1em;
   margin-bottom: 1em;
   display: flex;
   justify-content: space-between;
+  box-shadow: 1px 1px 5px gainsboro
 }
 
 .todo-item label {
   margin-right: 2em;
+}
+
+.is-disabled {
+  cursor: not-allowed;
 }
