@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ApiClient, ToDo } from './ApiClient';
 import './App.css';
 import { TodoList } from './components/TodoList';
+import { DRAG_AND_DROP_HELP_CONTENT } from './utils/content';
 
 const apiClient = new ApiClient(true);
 
@@ -129,6 +130,18 @@ function App() {
     }
   };
 
+  /**
+   * Update the list in the apiClient and state when the
+   * drag and drop has been completed.
+   */
+  const handleListChange = (updatedTodos: ToDo[]) => {
+    // Update list in API
+    apiClient.saveTodos(updatedTodos);
+
+    // Update parent state
+    setTodos(updatedTodos);
+  };
+
   let todoList = (
     <div>
       <p>{fetchingLabel}</p>
@@ -141,6 +154,7 @@ function App() {
         todos={todos}
         loading={isUpdating}
         handleToggleDone={handleToggleDone}
+        onListChange={handleListChange}
       />
     );
   }
@@ -153,19 +167,24 @@ function App() {
 
       {/* TODO: Add to separate component (TodoInput) if needed in the future */}
       <div className="add-todo-container">
-        <input
-          value={label}
-          onChange={(e) => setLabel(e.target.value)}
-          placeholder="Buy groceries"
-          disabled={isUpdating}
-        />
-        <button
-          className={loadingClass}
-          disabled={isAddingTodo}
-          onClick={() => handleAddTodo(label)}
-        >
-          {isAddingTodo ? 'Saving ToDo' : 'Add ToDo'}
-        </button>
+        <div className="add-todo-input">
+          <input
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            placeholder="Buy groceries"
+            disabled={isUpdating}
+          />
+          <button
+            className={loadingClass}
+            disabled={isAddingTodo}
+            onClick={() => handleAddTodo(label)}
+          >
+            {isAddingTodo ? 'Saving ToDo' : 'Add ToDo'}
+          </button>
+        </div>
+        <div className="text-help">
+          <small>{DRAG_AND_DROP_HELP_CONTENT}</small>
+        </div>
       </div>
 
       {todoList}

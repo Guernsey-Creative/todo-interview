@@ -19,7 +19,7 @@ export const TodoItem = ({
   const loadingClass = loading ? 'is-disabled' : '';
 
   return (
-    <div key={id} className="todo-item">
+    <div key={id} className="todo-item" role="listitem">
       <label style={{ textDecoration: done ? 'line-through' : 'none' }}>
         {label}
       </label>

@@ -1,7 +1,16 @@
 .add-todo-container {
-  display: flex;
   margin-bottom: 1em;
+}
+
+.add-todo-input {
+  display: flex;
   gap: 1em;
+}
+
+.text-help {
+  font-size: 14px;
+  font-weight: 600;
+  color: gray;
 }
 
 .add-todo-container input {
