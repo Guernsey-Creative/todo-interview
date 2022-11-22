@@ -143,6 +143,9 @@ function App() {
     setTodos(updatedTodos);
   };
 
+  const loadingClass = isUpdating ? 'is-disabled' : '';
+  const isLoading = isUpdating || isAddingTodo;
+
   let todoList = (
     <div>
       <p>{fetchingLabel}</p>
@@ -153,14 +156,12 @@ function App() {
     todoList = (
       <TodoList
         todos={todos}
-        loading={isUpdating}
+        loading={isLoading}
         handleToggleDone={handleToggleDone}
         onListChange={handleListChange}
       />
     );
   }
-
-  const loadingClass = isUpdating ? 'is-disabled' : '';
 
   return (
     <>
@@ -174,11 +175,11 @@ function App() {
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             placeholder="Buy groceries"
-            disabled={isUpdating}
+            disabled={isLoading}
           />
           <Button
             classes={`btn-success ${loadingClass}`}
-            disabled={isAddingTodo}
+            disabled={isLoading}
             onClick={() => handleAddTodo(label)}
           >
             {isAddingTodo ? 'Saving ToDo' : 'Add ToDo'}
