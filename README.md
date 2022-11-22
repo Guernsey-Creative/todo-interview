@@ -17,7 +17,7 @@ In addition to writing the code required by the instructions, write down your an
 Make a fork of this repo on your own GitHub account and then clone it down to your personal computer.
 
 You should be able to spin this app up using `yarn install` and `yarn start` (or `npm` if you prefer).
-If you have trouble, please don't hesistate to reach out.
+If you have trouble, please don't hesitate to reach out.
 
 ## Important Project contents
 
@@ -38,7 +38,7 @@ An API client that interacts with a fake database. Read the file over, but you s
    It's perfectly fine if the answer is no, but please discuss what would go wrong when the number of ToDos increases significantly
 2. "Mark Done" doesn't appear to work at all. Why not?
    Fix this bug and make sure the page updates once the ToDo has been marked as "done".
-   How could the API have been better designed to make the bug more noticable?
+   How could the API have been better designed to make the bug more noticeable?
 3. The ApiClient takes an argument `mockDelay`. Set that to `true` on line 5 of `App.tsx`.
    Add some visual indication to the UI during the initial "loading" time and any time the page is waiting for the server to respond.
    The style design doesn't need to look good, but it should indicate what the user can and cannot do.
