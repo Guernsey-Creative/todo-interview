@@ -28,7 +28,16 @@ function App() {
     fetchLatestTodos();
   }, []);
 
-  const handleFetchTodo = async (label: string) => {
+  /**
+   * Add a new todo through the API, and refresh the view
+   * without making an additional API call.
+   *
+   * Notes:
+   * - Maybe refocus on input after adding a todo
+   * - Or target the new todo if it has any additional actions
+   * @param label - Name of Todo item
+   */
+  const handleAddTodo = async (label: string) => {
     try {
       // Add additional todos through the API
       const newTodo = await apiClient.addTodo(label);
@@ -40,10 +49,6 @@ function App() {
 
       // Reset the input on successful update
       setLabel('');
-
-      // TODO (consider):
-      // - Maybe refocus on input after adding a todo
-      // - Or target the new todo if it has any additional actions
     } catch (error) {
       // TODO: In the future, add an notification for the client
       // about the error
@@ -52,7 +57,8 @@ function App() {
   };
 
   /**
-   * Mark a Todo as done
+   * Mark a Todo as done, and refresh the view
+   * without making an additional API call.
    *
    * Notes:
    * - toggleDone does not refresh even after a load
@@ -96,7 +102,7 @@ function App() {
           onChange={(e) => setLabel(e.target.value)}
           placeholder="Buy groceries"
         />
-        <button onClick={() => handleFetchTodo(label)}>Add ToDo</button>
+        <button onClick={() => handleAddTodo(label)}>Add ToDo</button>
       </div>
 
       {todos.map((todo) => (
