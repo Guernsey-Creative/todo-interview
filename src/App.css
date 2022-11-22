@@ -1,3 +1,9 @@
+:root {
+  --border-radius: 6px;
+  --light-gray: gainsboro;
+  --dark-gray: darkgray;
+}
+
 .add-todo-container {
   margin-bottom: 1em;
 }
@@ -16,22 +22,69 @@
 .add-todo-container input {
   flex-grow: 1;
   padding: 0.5em 1em;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--dark-gray);
+  transition: box-shadow 400ms;
+}
+
+.add-todo-container input:hover,
+.add-todo-container input:focus {
+  box-shadow: 1px 1px 6px var(--light-gray);
 }
 
 .todo-item {
   border: 1px solid gainsboro;
-  border-radius: 5px;
+  border-radius:  var(--border-radius);
   padding: 1em;
   margin-bottom: 1em;
   display: flex;
   justify-content: space-between;
-  box-shadow: 1px 1px 5px gainsboro
+  box-shadow: 1px 1px 5px var(--light-gray)
 }
 
 .todo-item label {
   margin-right: 2em;
 }
 
+
+.btn {
+  height: auto;
+  min-width: 95px;
+  padding: 0.5rem 1rem;
+  border: 2px solid #6179f2;
+  border-radius: var(--border-radius);
+  background-color: #6179f2;
+  -webkit-transition: .2s;
+  transition: .2s;
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #4763ef;
+}
+
+.btn.is-disabled {
+  background-color: #6e7fd1;
+  border: 2px solid #6e7fd1;
+}
+
+.btn-success {
+  border: 2px solid #05c484;
+  background-color: #05c484;
+}
+
+.btn-success:not(.is-disabled):hover {
+  background-color: #02a66f;
+}
+
+.btn-success.is-disabled {
+  background-color: #56d3a9;
+  border: 2px solid #56d3a9;
+}
+
 .is-disabled {
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }

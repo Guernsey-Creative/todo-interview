@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ApiClient, ToDo } from './ApiClient';
 import './App.css';
+import Button from './components/Button';
 import { TodoList } from './components/TodoList';
 import { DRAG_AND_DROP_HELP_CONTENT } from './utils/content';
 
@@ -169,18 +170,19 @@ function App() {
       <div className="add-todo-container">
         <div className="add-todo-input">
           <input
+            className="todo-input"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             placeholder="Buy groceries"
             disabled={isUpdating}
           />
-          <button
-            className={loadingClass}
+          <Button
+            classes={`btn-success ${loadingClass}`}
             disabled={isAddingTodo}
             onClick={() => handleAddTodo(label)}
           >
             {isAddingTodo ? 'Saving ToDo' : 'Add ToDo'}
-          </button>
+          </Button>
         </div>
         <div className="text-help">
           <small>{DRAG_AND_DROP_HELP_CONTENT}</small>

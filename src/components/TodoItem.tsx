@@ -1,3 +1,5 @@
+import Button from './Button';
+
 export interface ITodoItemProps {
   id: string;
   done: boolean;
@@ -24,13 +26,13 @@ export const TodoItem = ({
         {label}
       </label>
 
-      <button
-        className={loadingClass}
+      <Button
+        classes={loadingClass}
         disabled={loading}
         onClick={() => handleToggleDone(id)}
       >
         Mark {done ? 'Undone' : 'Done'}
-      </button>
+      </Button>
     </div>
   );
 };
