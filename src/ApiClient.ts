@@ -48,7 +48,7 @@ export class ApiClient {
    * Toggles the 'done' state of a todo
    * @param id The ID of the todo to toggle
    */
-  async toggleDone(id: string): Promise<ToDo | undefined> {
+  async toggleDone(id: string): Promise<ToDo> {
     await this.delay();
     const currentToDos = await this.getToDos();
     const todoToUpdate = currentToDos.find((todo) => todo.id === id);
@@ -56,7 +56,10 @@ export class ApiClient {
       todoToUpdate.done = !todoToUpdate.done;
     }
     this.saveTodos(currentToDos);
-    return todoToUpdate;
+
+    // I think we can assume that the Todo will always exist,
+    // unless it can be deleted somehow?
+    return todoToUpdate as ToDo;
   }
 
   /**

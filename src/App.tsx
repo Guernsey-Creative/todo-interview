@@ -51,8 +51,40 @@ function App() {
     }
   };
 
-  // Update view for toggleDone
-  // toggleDone does not refresh even after a load
+  /**
+   * Mark a Todo as done
+   *
+   * Notes:
+   * - toggleDone does not refresh even after a load
+   *
+   * @param id
+   */
+  const handleToggleDone = async (id: string) => {
+    try {
+      // We return the toggle Todo, but we don't update the view
+      await apiClient.toggleDone(id);
+
+      // Don't duplicate the todo item
+      const updatedTodos = todos.map((todo) => {
+        // If the todo has the same ID as the toggled ID,
+        // update that todo
+        if (todo.id === id) {
+          // Use the spread operator to create a new object
+          // Toggle `done` property on the todo
+          return { ...todo, done: !todo.done };
+        }
+
+        return todo;
+      });
+
+      // Update view for toggleDone
+      setTodos(updatedTodos);
+    } catch (error) {
+      // TODO: In the future, add an notification for the client
+      // about the error
+      console.error('Could not complete Todo: ', error);
+    }
+  };
 
   return (
     <>
@@ -74,7 +106,7 @@ function App() {
           >
             {todo.label}
           </label>
-          <button onClick={() => apiClient.toggleDone(todo.label)}>
+          <button onClick={() => handleToggleDone(todo.id)}>
             Mark {todo.done ? 'Undone' : 'Done'}
           </button>
         </div>
