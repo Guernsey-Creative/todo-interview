@@ -57,10 +57,27 @@ An API client that interacts with a fake database. Read the file over, but you s
 
 Please write your responses to the questions in the instructions here. Please indicate any tradeoffs you made.
 
-1.
-2.
-3.
-4.
+1.  To fix the bug, I re-rendered the view by updating the state. Initially, I thought we could move out the `apiClient.getToDos()` function to a re-usable function (`fetchLatestTodos`) because that would force the component to re-render with the updated list.
+
+    However, in a real context, we probably don't want to make that many API calls. So, the tradeoff for an additional API call was to update the state, which has some similar code being re-used from the `apiClient`, but I think that's a small tradeoff.
+
+    Additionally, I added memoization to the `TodoList` component--let React handle caching under the hood. I think memoizing the component is a good step at performance, in case we have 1 million or more todos. However, if we have that many Todos we will also want to consider virtual scrolling, so the browser doesn't crash for a user. We can save that for when there's more time :)
+
+2.  Similar to the "Add ToDo" bug, the view was not updating with latest changes after saving the updated list in the `apiClient`.
+
+    Also, the `toggleDone` in the App was passing the ToDo's `label` instead of the `id`, which wouldn't properly find the ToDo in the list.
+
+    If we couldn't find the ToDo to toggle, the API could have returned an error because you cannot toggle a ToDo as done if it doesn't exist.
+
+3.  While the App is loading, whether that's adding a ToDo or marking a ToDo as done, I added loading states to the buttons. I added a disabled state for the buttons, so the user could not click the buttons while the app is in a loading state.
+
+    There is also a loading message when a list is being pulled in.
+
+4.  I rolled with a third party package because of the time constraints and my previous experience with Drag and Drop within projects. To get something up quickly, a package has been simpler to implement because it's documented and typically has examples and use-cases that have already been considered. I usually look to make sure the stars on a GitHub repo, how often it's downloaded on NPM, and if it's well documented.
+
+I chose the `react-beautiful-dnd` package because it's built, used, and maintained by Atlassian. Also, packages like `react-beautiful-dnd` have options to handle more complex dragging that rolling Vanilla might be more troublesome to maintain. However, I fully realize for a simplistic list drag-and-drop, pulling in a package may be overkill.
+
+Given more time to read through the native HTML drag-and-drop API features on MDN, I might choose to go with an independent implementation, especially if we never go beyond re-ordering a list. So, the cost of maintaining our own implementation would be relatively low overhead than rolling with another library.
 
 ## Submitting
 
